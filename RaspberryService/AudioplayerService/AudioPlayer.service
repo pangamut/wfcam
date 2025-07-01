@@ -1,0 +1,15 @@
+[Unit]
+Description=Audio Player - plays all MP3 files in a directory in a loop
+#After=syslog.target
+After=multi-user.target
+
+[Service]
+Type=simple
+User=audioplayer
+Group=audioplayer
+WorkingDirectory=/home/audioplayer
+ExecStart=/home/audioplayer/player.sh
+
+[Install]
+#WantedBy=multi-user.target
+#WantedBy=multi-user.target

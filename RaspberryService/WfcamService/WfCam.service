@@ -1,0 +1,15 @@
+[Unit]
+Description=WfCam - Wanderfalken Kamera Invasoren Erkennung
+#After=syslog.target
+After=multi-user.target
+
+[Service]
+Type=simple
+User=wfcam
+Group=wfcam
+WorkingDirectory=/home/wfcam
+ExecStart=/home/wfcam/InvadorMonitoring.py
+
+[Install]
+WantedBy=multi-user.target
+#WantedBy=multi-user.target
