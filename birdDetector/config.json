@@ -1,0 +1,22 @@
+{
+  "camera": {
+    "video_source": "rtsp://username:password@192.168.1.100/stream1",
+    "checks_per_second": 2,
+    "confidence_threshold": 0.5
+  },
+  "alarm": {
+    "ip_socket": "10.1.1.81",
+    "wait_seconds": 2,
+    "duration_seconds": 5,
+    "cooldown_seconds": 30
+  },
+  "detection": {
+    "model_path": "/app/models/best.pt",
+    "intruder_species": ["Nilgans", "Uhu"],
+    "snapshot_dir": "/app/snapshots"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/app/logs/bird_detector.log"
+  }
+}

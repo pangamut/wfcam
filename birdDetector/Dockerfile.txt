@@ -1,0 +1,43 @@
+# Dockerfile
+FROM python:3.11-slim
+
+# System-Pakete für OpenCV installieren
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    libgcc-s1 \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Arbeitsverzeichnis erstellen
+WORKDIR /app
+
+# Python-Abhängigkeiten kopieren und installieren
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Anwendung kopieren
+COPY bird_detector.py .
+COPY config.json .
+
+# Verzeichnisse für Daten erstellen
+RUN mkdir -p snapshots logs
+
+# Volumes für persistente Daten
+VOLUME ["/app/snapshots", "/app/logs", "/app/models"]
+
+# Standard-Benutzer (nicht root)
+RUN groupadd -r birduser && useradd -r -g birduser birduser
+RUN chown -R birduser:birduser /app
+USER birduser
+
+# Health Check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python -c "import sys; sys.exit(0)"
+
+# Container starten
+CMD ["python", "bird_detector.py"]

@@ -1,0 +1,40 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  bird-detector:
+    build: .
+    container_name: bird_detector
+    restart: unless-stopped
+    
+    # Netzwerk-Zugriff für Kamera und Alarm
+    network_mode: host
+    
+    # Volumes für persistente Daten
+    volumes:
+      - ./snapshots:/app/snapshots
+      - ./logs:/app/logs
+      - ./models:/app/models
+      - ./config.json:/app/config.json:ro
+    
+    # Umgebungsvariablen
+    environment:
+      - TZ=Europe/Berlin
+      - PYTHONUNBUFFERED=1
+    
+    # Ressourcen-Limits für Synology
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    
+    # Logging-Konfiguration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
